@@ -1,0 +1,22 @@
+{% extends 'todo/layout.html' %}
+
+{% block content %}
+<div class="modal-content">
+    <div class="modal-header">
+      <div class="icon-box">
+        <i class="fa-solid fa-circle-user"></i>
+      </div>
+      <h4 class="modal-title">¿Estás seguro?</h4>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>¿Estás completamente seguro que deseas eliminar tu cuenta "{{ object }}"? Esta acción es irreversible.</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+        <form method="post">{% csrf_token %}
+            <button type="submit" value="Confirm" class="btn btn-danger">Delete</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

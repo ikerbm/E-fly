@@ -1,0 +1,26 @@
+{% extends 'todo/layout.html' %}
+
+{% block content %}
+
+<div class="container" id="container">
+	<div class="form-container sign-in-container">
+		<form method="POST">
+			{% csrf_token %}
+
+			<div class="container" id="container" style="text-align: center;">
+				<div class="p-3 mb-2 bg-warning text-dark">
+					<h2>Añadir Tarjeta</h2>
+				</div>
+				{{form.as_p}}
+
+
+				<button type="submit" class="btn btn-warning">Añadir Tarjeta</button>
+			</div>
+
+			
+
+		</form>
+	</div>		
+	
+</div>
+{% endblock %}

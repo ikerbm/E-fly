@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    
+    <!-- E-Fly CSS -->
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/estilos.css' %}">
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/cf924c4f2c.js" crossorigin="anonymous"></script>
+    </head>
+<!-- Fondo de la pagina -->
+    <body style="background: url('/static/img/bg-plane.jpg') no-repeat center center fixed; background-size: auto;background-repeat: inherit;">
+<!-- Fin del Fondo de la pagina !!! -->
+
+<!-- Encabesado de la pagina -->
+      <div class="header-blue">
+        <nav class="navbar navbar-dark navbar-expand-md navigation-clean-search">
+          {% if not request.user.tipoUsuario == 'admin' %}
+            <div class="container"><a class="navbar-brand" href="{% url 'home' %}"><img style="max-height: 100px;" src="{% static 'img/logo2.png' %}" alt="logo" class="img-logo-header"></a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+              {% endif %}    
+              {% if request.user.tipoUsuario == 'admin' %}  
+              <div class="container"><a class="navbar-brand" href="{% url 'homeadministrador' %}"><img style="max-height: 100px;" src="{% static 'img/logo2.png' %}" alt="logo" class="img-logo-header"></a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+              {% endif %}
+              <div class="collapse navbar-collapse" id="navcol-1">
+                    
+  <!-- Menu de navegacion -->
+                    <ul class="nav navbar-nav flex-grow-1">
+                      {% if request.user.is_authenticated%}
+                        <!-- Menu de navegacion para el cliente -->
+                        {% if request.user.tipoUsuario == 'cliente' %}
+                        <li class="nav-item" role="presentation"><a class="nav-link active" href="#">Vuelos</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link active" href="#">Check-in</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link active" href="#">Compras</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link active" href="#">Reservas</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link active" href="#">Noticias</a></li>
+                        {% endif %}
+                        <!-- Menu de navegacion para el administrador -->
+                        {% if request.user.tipoUsuario == 'admin' %}
+                          <li class="nav-item" role="presentation"><a class="nav-link active" href="#">Administracion</a></li>
+                        {% endif %}
+                        <!-- Menu de navegacion para el root -->
+                        {% if request.user.tipoUsuario == 'root' %}
+                        {% endif %}
+                      <!-- Menu de navegacion por defecto para el visitante -->
+                      {% else %}
+                        <li class="nav-item" role="presentation"><a class="nav-link active" href="#">Vuelos</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link active" href="#">Check-in</a></li>
+                      {% endif %}
+  <!-- FIN del Menu de navegacion !!! -->
+
+
+                      {% if request.user.is_authenticated and request.user.username == 'root' %}
+                        <li class="dropdown"><a class="dropdown-toggle nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#">Admin</a>
+                          <div class="dropdown-menu" role="menu">
+                              <a class="dropdown-item" role="presentation" href="{% url 'user_list' %}">Ver Admin's</a>
+                              <a class="dropdown-item" role="presentation" href="{% url 'create_admin' %}">Crear Admin</a>
+                          </div>
+                        </li>
+                      {% endif %}
+                    </ul>
+                    
+  <!-- Menu de navegacion propio de cada usuario -->
+                    <div class="text-right">
+                      {% if request.user.is_authenticated %}
+                        <!-- Menu desplegable -->
+                        <div class="dropdown user-dropdown-toggle"><a class="" data-toggle="dropdown" aria-expanded="false" href="#"><i class="fa-solid fa-circle-user"></i></a>
+                          <div class="dropdown-menu dropdown-menu-right" role="menu">
+                            
+
+                            <a class="dropdown-item" role="presentation" href="{% url 'exit' %}">Cerrar Sesión</a>
+                            
+                            <!-- Menu para cliente -->
+                            {% if request.user.tipoUsuario == 'cliente' %}
+                              <a class="dropdown-item" role="presentation" href="Edit/{{user.DNI}}">Editar Perfil</a>
+                              <a class="dropdown-item" role="presentation" href="AddCard/{{user.DNI}}">Añadir Tarjeta</a>
+                              <a class="dropdown-item" role="presentation" href="{% url 'user_delete' user.pk %}">Eliminar Cuenta</a>
+                              <a class="dropdown-item" role="presentation" href="{% url 'exit' %}">Cerrar Sesión</a>
+                            {% endif %}
+                            <!-- FIN del Menu para cliente !!! -->
+
+                            <!-- Menu para el Administrador -->
+                            {% if request.user.tipoUsuario == 'admin' %}
+                              <a class="dropdown-item" role="presentation" href="Edit/{{user.DNI}}">Editar Perfil</a>
+                              <a class="dropdown-item" role="presentation" href="{% url 'exit' %}">Cerrar Sesión</a>
+                            {% endif %}
+                            <!-- FIN del Menu para el Administrador !!! -->
+
+                            <!-- Menu para el root -->
+                            {% if request.user.tipoUsuario == 'root' %}
+                            {% endif %}
+                            <!-- FIN del Menu para el root !!! -->
+                          </div>
+                        </div>
+                      <!-- Menu si no inicia secion -->
+                      {%else%}
+                        <span class="navbar-text"> <a href="{% url 'login' %}" class="login">Iniciar Sesión</a></span><a class="btn btn-light action-button" role="button" href={% url 'register' %}>Resgistrarse</a></div>
+                      {% endif %}
+                      <!-- FIN del Menu si no inicia secion !!! -->
+                    </div>
+    <!-- FIN del Menu desplegable -->
+            </div>
+        </nav>
+    </div>
+<!-- Fin del Encabesado !!! -->
+  
+  <!-- Page Content -->
+  <div class="container main-container">
+    <div class="card border-0 shadow my-5">
+            <!-- <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item" aria-current="page">{{ request.path }}</li>
+                </ol>
+            </nav> -->
+
+        
+    {% block content %}
+    {% endblock %}
+    </div>
+  </div>
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+    <!-- Option 2: jQuery, Popper.js, and Bootstrap JS
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+    -->
+  </body>
+</html>
